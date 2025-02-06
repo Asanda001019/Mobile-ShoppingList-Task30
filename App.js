@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Button, FlatList, TextInput, CheckBox, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, TextInput, Alert, StyleSheet } from 'react-native';
+import { RadioButton } from 'react-native-paper';  // Import the RadioButton component
+
 import { useSelector, useDispatch } from 'react-redux';
 import { 
   addShoppingList, 
@@ -16,8 +18,8 @@ const App = () => {
   const dispatch = useDispatch();
   const shoppingLists = useSelector((state) => state.shoppingLists);
 
-  const [inputs, setInputs] = useState({}); 
-  const [editingItem, setEditingItem] = useState(null); 
+  const [inputs, setInputs] = useState({});
+  const [editingItem, setEditingItem] = useState(null);
   const [newShoppingListName, setNewShoppingListName] = useState('');
 
   const handleInputChange = (listId, field, value) => {
@@ -34,6 +36,9 @@ const App = () => {
     if (newShoppingListName.trim()) {
       dispatch(addShoppingList(newShoppingListName));
       setNewShoppingListName('');
+      Alert.alert('Success', 'Shopping List added successfully!');
+    } else {
+      Alert.alert('Error', 'Please enter a valid shopping list name.');
     }
   };
 
@@ -51,6 +56,9 @@ const App = () => {
         ...prevInputs,
         [listId]: { name: '', quantity: '' },
       }));
+      Alert.alert('Success', 'Item added successfully!');
+    } else {
+      Alert.alert('Error', 'Please provide both name and quantity.');
     }
   };
 
@@ -60,6 +68,12 @@ const App = () => {
 
   const handleDeleteItem = (listId, itemId) => {
     dispatch(deleteItem(listId, itemId));
+    Alert.alert('Success', 'Item deleted successfully!');
+  };
+
+  const handleDeleteShoppingList = (listId) => {
+    dispatch(deleteShoppingList(listId));
+    Alert.alert('Success', 'Shopping list deleted successfully!');
   };
 
   const handleEditItem = (listId, itemId) => {
@@ -75,6 +89,9 @@ const App = () => {
         ...prevInputs,
         [listId]: { name: '', quantity: '' },
       }));
+      Alert.alert('Success', 'Item updated successfully!');
+    } else {
+      Alert.alert('Error', 'Please provide both name and quantity.');
     }
   };
 
@@ -105,7 +122,7 @@ const App = () => {
         renderItem={({ item }) => (
           <View style={styles.shoppingListCard}>
             <Text style={styles.shoppingListName}>{item.name}</Text>
-            <Button title="Delete List" onPress={() => dispatch(deleteShoppingList(item.id))} />
+            <Button title="Delete List" onPress={() => handleDeleteShoppingList(item.id)} />
 
             {/* Add New Item Form: Only show if not editing */}
             {editingItem?.listId !== item.id && (
@@ -134,15 +151,22 @@ const App = () => {
                 renderItem={({ item: listItem }) => (
                   <View style={styles.itemCard}>
                     <Text style={styles.itemText}>{listItem.name} ({listItem.quantity})</Text>
-                    
-                    {/* Adjust the checkbox size and spacing */}
-                    <CheckBox
-                      value={listItem.purchased}
-                      onValueChange={() => handleTogglePurchased(item.id, listItem.id)}
-                      style={styles.checkbox}
+
+                    {/* Replace checkbox with radio button */}
+                    <RadioButton
+                      value="checked"
+                      status={listItem.purchased ? 'checked' : 'unchecked'}
+                      onPress={() => handleTogglePurchased(item.id, listItem.id)}
                     />
                     
-                    {/* Space between checkbox and buttons */}
+                    {/* Show message if item is not purchased */}
+                    {!listItem.purchased && (
+                      <Text style={styles.radioButtonMessage}>
+                        Please check when bought!
+                      </Text>
+                    )}
+                    
+                    {/* Space between radio button and buttons */}
                     <View style={styles.buttonsContainer}>
                       {editingItem?.itemId === listItem.id && editingItem.listId === item.id ? (
                         <View style={styles.editForm}>
@@ -255,12 +279,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
-  checkbox: {
-    marginBottom: 10, // Space between checkbox and other buttons
-    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }], // Increase the checkbox size
+  radioButton: {
+    marginBottom: 10, // Space between radio button and other buttons
+  },
+  radioButtonMessage: {
+    fontSize: 14,
+    color: 'red', // Color for the message
+    marginTop: 5,
   },
   buttonsContainer: {
-    marginTop: 10, // Add space between the checkbox and buttons
+    marginTop: 10, // Add space between the radio button and buttons
   },
   editForm: {
     marginBottom: 10,

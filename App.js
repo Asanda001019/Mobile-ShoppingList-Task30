@@ -170,6 +170,9 @@ const App = () => {
                           onPress={() => handleEditButtonPress(item.id, listItem)}
                         />
                       )}
+                      
+                      {/* Space between Edit and Delete buttons */}
+                      <View style={styles.buttonSpacing} />
                       <Button
                         title="Delete Item"
                         onPress={() => handleDeleteItem(item.id, listItem.id)}
@@ -210,7 +213,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     backgroundColor: '#fff',
-  
   },
   shoppingListCard: {
     backgroundColor: '#fff',
@@ -262,6 +264,9 @@ const styles = StyleSheet.create({
   },
   editForm: {
     marginBottom: 10,
+  },
+  buttonSpacing: {
+    marginBottom: 10, // Adds space between the Edit and Delete buttons
   },
 });
 

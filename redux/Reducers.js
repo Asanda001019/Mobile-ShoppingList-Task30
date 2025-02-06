@@ -7,7 +7,7 @@ import {
     DELETE_ITEM,
     EDIT_ITEM,
     TOGGLE_ITEM_PURCHASED,
-    EDIT_SHOPPING_LIST_NAME, // Import the new action
+    EDIT_SHOPPING_LIST_NAME,
   } from './Actions';
   
   const initialState = {
@@ -36,7 +36,18 @@ import {
           ...state,
           shoppingLists: state.shoppingLists.map((list) =>
             list.id === action.payload.listId
-              ? { ...list, items: [...list.items, action.payload.item] }
+              ? {
+                  ...list,
+                  items: [
+                    ...list.items,
+                    {
+                      id: Date.now(),
+                      name: action.payload.item.name,
+                      quantity: action.payload.item.quantity,
+                      purchased: false,
+                    },
+                  ],
+                }
               : list
           ),
         };
@@ -47,7 +58,9 @@ import {
             list.id === action.payload.listId
               ? {
                   ...list,
-                  items: list.items.filter((item) => item.id !== action.payload.itemId),
+                  items: list.items.filter(
+                    (item) => item.id !== action.payload.itemId
+                  ),
                 }
               : list
           ),
@@ -84,7 +97,7 @@ import {
               : list
           ),
         };
-      case EDIT_SHOPPING_LIST_NAME: // Handle the new action
+      case EDIT_SHOPPING_LIST_NAME:
         return {
           ...state,
           shoppingLists: state.shoppingLists.map((list) =>

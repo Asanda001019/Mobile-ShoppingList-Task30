@@ -99,6 +99,7 @@ const App = () => {
       />
       <Button title="Add Shopping List" onPress={handleAddShoppingList} />
 
+      {/* Shopping Lists */}
       <FlatList
         data={shoppingLists}
         renderItem={({ item }) => (
@@ -125,50 +126,60 @@ const App = () => {
               </View>
             )}
 
-            {/* Display Items in the Shopping List */}
-            <FlatList
-              data={item.items}
-              renderItem={({ item: listItem }) => (
-                <View style={styles.itemCard}>
-                  <Text style={styles.itemText}>{listItem.name} ({listItem.quantity})</Text>
-                  <CheckBox
-                    value={listItem.purchased}
-                    onValueChange={() => handleTogglePurchased(item.id, listItem.id)}
-                  />
-                  {editingItem?.itemId === listItem.id && editingItem.listId === item.id ? (
-                    <View style={styles.editForm}>
-                      <TextInput
-                        value={inputs[item.id]?.name || ''}
-                        onChangeText={(text) => handleInputChange(item.id, 'name', text)}
-                        placeholder="Edit Name"
-                        style={styles.input}
-                      />
-                      <TextInput
-                        value={inputs[item.id]?.quantity || ''}
-                        onChangeText={(text) => handleInputChange(item.id, 'quantity', text)}
-                        placeholder="Edit Quantity"
-                        style={styles.input}
-                      />
-                      <Button
-                        title="Save Changes"
-                        onPress={() => handleEditItem(item.id, listItem.id)}
-                      />
-                      <Button title="Cancel" onPress={() => setEditingItem(null)} />
-                    </View>
-                  ) : (
-                    <Button
-                      title="Edit Item"
-                      onPress={() => handleEditButtonPress(item.id, listItem)}
+            {/* Display Items in the Shopping List (arranged horizontally) */}
+            <View style={styles.itemsContainer}>
+              <FlatList
+                data={item.items}
+                horizontal
+                renderItem={({ item: listItem }) => (
+                  <View style={styles.itemCard}>
+                    <Text style={styles.itemText}>{listItem.name} ({listItem.quantity})</Text>
+                    
+                    {/* Adjust the checkbox size and spacing */}
+                    <CheckBox
+                      value={listItem.purchased}
+                      onValueChange={() => handleTogglePurchased(item.id, listItem.id)}
+                      style={styles.checkbox}
                     />
-                  )}
-                  <Button
-                    title="Delete Item"
-                    onPress={() => handleDeleteItem(item.id, listItem.id)}
-                  />
-                </View>
-              )}
-              keyExtractor={(listItem) => listItem.id.toString()}
-            />
+                    
+                    {/* Space between checkbox and buttons */}
+                    <View style={styles.buttonsContainer}>
+                      {editingItem?.itemId === listItem.id && editingItem.listId === item.id ? (
+                        <View style={styles.editForm}>
+                          <TextInput
+                            value={inputs[item.id]?.name || ''}
+                            onChangeText={(text) => handleInputChange(item.id, 'name', text)}
+                            placeholder="Edit Name"
+                            style={styles.input}
+                          />
+                          <TextInput
+                            value={inputs[item.id]?.quantity || ''}
+                            onChangeText={(text) => handleInputChange(item.id, 'quantity', text)}
+                            placeholder="Edit Quantity"
+                            style={styles.input}
+                          />
+                          <Button
+                            title="Save Changes"
+                            onPress={() => handleEditItem(item.id, listItem.id)}
+                          />
+                          <Button title="Cancel" onPress={() => setEditingItem(null)} />
+                        </View>
+                      ) : (
+                        <Button
+                          title="Edit Item"
+                          onPress={() => handleEditButtonPress(item.id, listItem)}
+                        />
+                      )}
+                      <Button
+                        title="Delete Item"
+                        onPress={() => handleDeleteItem(item.id, listItem.id)}
+                      />
+                    </View>
+                  </View>
+                )}
+                keyExtractor={(listItem) => listItem.id.toString()}
+              />
+            </View>
           </View>
         )}
         keyExtractor={(item) => item.id.toString()}
@@ -199,6 +210,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     backgroundColor: '#fff',
+  
   },
   shoppingListCard: {
     backgroundColor: '#fff',
@@ -219,13 +231,20 @@ const styles = StyleSheet.create({
   itemForm: {
     marginBottom: 20,
   },
+  itemsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    flexWrap: 'wrap',
+  },
   itemCard: {
     backgroundColor: '#f9f9f9',
     borderRadius: 8,
     padding: 10,
+    marginRight: 10,
     marginBottom: 10,
-    elevation: 3, // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
+    elevation: 3,
+    shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
@@ -233,6 +252,13 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  checkbox: {
+    marginBottom: 10, // Space between checkbox and other buttons
+    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }], // Increase the checkbox size
+  },
+  buttonsContainer: {
+    marginTop: 10, // Add space between the checkbox and buttons
   },
   editForm: {
     marginBottom: 10,

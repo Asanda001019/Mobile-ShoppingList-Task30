@@ -114,7 +114,7 @@ const App = () => {
         placeholder="Enter shopping list name"
         style={styles.input}
       />
-      <Button title="Add Shopping List" onPress={handleAddShoppingList} />
+      <Button title="Add Shopping List" onPress={handleAddShoppingList} color="#FF6F61" />
 
       {/* Shopping Lists */}
       <FlatList
@@ -122,7 +122,7 @@ const App = () => {
         renderItem={({ item }) => (
           <View style={styles.shoppingListCard}>
             <Text style={styles.shoppingListName}>{item.name}</Text>
-            <Button title="Delete List" onPress={() => handleDeleteShoppingList(item.id)} />
+            <Button title="Delete List" onPress={() => handleDeleteShoppingList(item.id)} color="#FF6F61" />
 
             {/* Add New Item Form: Only show if not editing */}
             {editingItem?.listId !== item.id && (
@@ -139,7 +139,7 @@ const App = () => {
                   placeholder="Quantity"
                   style={styles.input}
                 />
-                <Button title="Add Item" onPress={() => handleAddItem(item.id)} />
+                <Button title="Add Item" onPress={() => handleAddItem(item.id)} color="#6C63FF" />
               </View>
             )}
 
@@ -185,13 +185,15 @@ const App = () => {
                           <Button
                             title="Save Changes"
                             onPress={() => handleEditItem(item.id, listItem.id)}
+                            color="#4CAF50"
                           />
-                          <Button title="Cancel" onPress={() => setEditingItem(null)} />
+                          <Button title="Cancel" onPress={() => setEditingItem(null)} color="#FF6F61" />
                         </View>
                       ) : (
                         <Button
                           title="Edit Item"
                           onPress={() => handleEditButtonPress(item.id, listItem)}
+                          color="#6C63FF"
                         />
                       )}
                       
@@ -200,6 +202,7 @@ const App = () => {
                       <Button
                         title="Delete Item"
                         onPress={() => handleDeleteItem(item.id, listItem.id)}
+                        color="#FF6F61"
                       />
                     </View>
                   </View>
@@ -224,52 +227,55 @@ const AppWithProvider = () => (
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#F5F5F5',  // Light gray background for the app
   },
   header: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#333',  // Darker color for header text
   },
   input: {
     borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 15,
+    backgroundColor: '#FFFFFF',  // White input background
+    borderColor: '#ddd',  // Light border color
   },
   shoppingListCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 20,
+    backgroundColor: '#FFFFFF',  // White background for cards
+    borderRadius: 15,
+    padding: 25,
+    marginBottom: 25,
     elevation: 5, // Shadow for Android
     shadowColor: '#000', // Shadow for iOS
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
   },
   shoppingListName: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 15,
+    color: '#2D3A3A',  // Dark green text color for shopping list title
   },
   itemForm: {
-    marginBottom: 20,
+    marginBottom: 25,
   },
   itemsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
+    justifyContent: 'flex-start',
+    marginBottom: 25,
     flexWrap: 'wrap',
   },
   itemCard: {
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8,
-    padding: 10,
-    marginRight: 10,
-    marginBottom: 10,
-    elevation: 3,
+    backgroundColor: '#E8E8E8',  // Light gray for items
+    borderRadius: 10,
+    padding: 15,
+    marginRight: 15,
+    marginBottom: 15,
+    elevation: 4,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -277,24 +283,25 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 10,
+    color: '#333',  // Dark text for item names
   },
   radioButton: {
-    marginBottom: 10, // Space between radio button and other buttons
+    marginBottom: 10,
   },
   radioButtonMessage: {
     fontSize: 14,
-    color: 'red', // Color for the message
+    color: '#D32F2F',  // Red color for alert message
     marginTop: 5,
   },
   buttonsContainer: {
-    marginTop: 10, // Add space between the radio button and buttons
+    marginTop: 15, // Add space between the radio button and buttons
   },
   editForm: {
-    marginBottom: 10,
+    marginBottom: 15,
   },
   buttonSpacing: {
-    marginBottom: 10, // Adds space between the Edit and Delete buttons
+    marginBottom: 15,  // Adds space between Edit and Delete buttons
   },
 });
 
